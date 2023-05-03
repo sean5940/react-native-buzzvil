@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.buzzvil">
-
+    <application>
+      <meta-data
+        android:name="com.buzzvil.APP_KEY"
+        android:value="${appJSONBuzzvilAdsAppID}"/>
+    </application>
 </manifest>

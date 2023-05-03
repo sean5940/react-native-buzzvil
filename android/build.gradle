@@ -36,6 +36,26 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["Buzzvil_" + name]).toInteger()
 }
 
+apply from: file("./app-json.gradle")
+
+def appJSONBuzzvilAdsAppIDString
+
+if (rootProject.ext.buzzvilAdsJson) {
+  appJSONBuzzvilAdsAppIDString = rootProject.ext.buzzvilAdsJson.getStringValue("android_app_id", "")
+}
+
+if (!appJSONBuzzvilAdsAppIDString) {
+  println "\n\n\n"
+  println "**************************************************************************************************************"
+  println "\n\n\n"
+  println "ERROR: react-native-buzzvil-ads requires an 'android_app_id' property inside a 'react-native-buzzvil-ads' key in your app.json."
+  println "  No android_app_id property was found in this location. The native buzzvil Ads SDK will crash on startup without it."
+  println "\n\n\n"
+  println "**************************************************************************************************************"
+  println "\n\n\n"
+  System.exit(1)
+}
+
 android {
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
@@ -43,6 +63,10 @@ android {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+    multiDexEnabled true
+    manifestPlaceholders = [
+      appJSONBuzzvilAdsAppID                  : appJSONBuzzvilAdsAppIDString,
+    ]
   }
   buildTypes {
     release {
@@ -62,8 +86,10 @@ android {
 }
 
 repositories {
+  jcenter()
   mavenCentral()
   google()
+  maven { url "https://dl.buzzvil.com/public/maven" }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -74,6 +100,7 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation ("com.buzzvil:buzzad-benefit:3.33.+")
 }
 
 if (isNewArchitectureEnabled()) {
