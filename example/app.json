@@ -1,4 +1,7 @@
 {
   "name": "BuzzvilExample",
-  "displayName": "BuzzvilExample"
+  "displayName": "BuzzvilExample",
+   "react-native-buzzvil-ads": {
+        "android_app_id": "app-pub-264787971045311"
+    }
 }

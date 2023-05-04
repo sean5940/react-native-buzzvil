@@ -17,6 +17,7 @@ package com.buzzvil.common;
  *
  */
 
+import com.buzzvil.BuildConfig;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class ReactNativeJSON {
 
   private ReactNativeJSON() {
     try {
-      jsonObject = new JSONObject("BUZZVIL_ADS_JSON_RAW");
+      jsonObject = new JSONObject(BuildConfig.BUZZVIL_ADS_JSON_RAW);
     } catch (JSONException e) {
       // JSON is validated as part of gradle build - should never error
     }
@@ -85,7 +86,7 @@ public class ReactNativeJSON {
   }
 
   public String getRawJSON() {
-    return "BUZZVIL_ADS_JSON_RAW";
+    return BuildConfig.BUZZVIL_ADS_JSON_RAW;
   }
 
   public WritableMap getAll() {

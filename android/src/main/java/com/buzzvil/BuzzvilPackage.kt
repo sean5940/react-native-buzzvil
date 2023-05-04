@@ -8,10 +8,12 @@ import com.facebook.react.uimanager.ViewManager
 
 class BuzzvilPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return emptyList()
+    val moduleList: MutableList<NativeModule> = mutableListOf();
+    moduleList.add(ReactNativeBuzzvilAdModule(reactContext))
+    return moduleList
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(BuzzvilViewManager())
+    return listOf(BuzzvilFeedViewManager(reactContext))
   }
 }

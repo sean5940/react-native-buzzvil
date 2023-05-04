@@ -84,13 +84,15 @@ android {
   }
 
 }
-
-repositories {
-  jcenter()
-  mavenCentral()
-  google()
-  maven { url "https://dl.buzzvil.com/public/maven" }
+rootProject.allprojects {
+  repositories {
+    jcenter()
+    mavenCentral()
+    google()
+    maven { url "https://dl.buzzvil.com/public/maven" }
+  }
 }
+
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 

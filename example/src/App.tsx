@@ -1,14 +1,19 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
 import { StyleSheet, View } from 'react-native';
-import { BuzzvilView } from 'react-native-buzzvil';
+import BuzzvilAdModule from 'react-native-buzzvil';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <BuzzvilView color="#32a852" style={styles.box} />
-    </View>
-  );
+  useEffect(() => {
+    BuzzvilAdModule.initialize();
+    BuzzvilAdModule.setUserInfo({
+      userId: '1',
+      gender: 'MALE',
+      birthYear: 2022,
+    });
+  }, []);
+
+  return <View style={styles.container} />;
 }
 
 const styles = StyleSheet.create({
