@@ -4,6 +4,8 @@ import android.util.Log
 import com.buzzvil.buzzad.benefit.BuzzAdBenefit
 import com.buzzvil.buzzad.benefit.BuzzAdBenefitConfig
 import com.buzzvil.buzzad.benefit.core.models.UserProfile
+import com.buzzvil.buzzad.benefit.presentation.feed.FeedConfig
+import com.buzzvil.model.FeedIdInfo
 import com.buzzvil.model.UserInfo
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -24,11 +26,19 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
   }
 
   @ReactMethod
-  fun initialize(promise: Promise) {
-    reactApplicationContext
-    val buzzAdBenefitConfig: BuzzAdBenefitConfig =
+  fun initialize(requestFeedInfo: ReadableMap?, promise: Promise) {
+    val (feedId) = buildAdIdInfo(requestFeedInfo)
+
+    val buzzAdBenefitConfig: BuzzAdBenefitConfig = if (feedId == null) {
       BuzzAdBenefitConfig.Builder(reactApplicationContext.applicationContext)
         .build()
+    } else {
+      val feedConfig = FeedConfig.Builder(feedId)
+        .build()
+      BuzzAdBenefitConfig.Builder(reactApplicationContext.applicationContext)
+        .setDefaultFeedConfig(feedConfig)
+        .build()
+    }
 
     BuzzAdBenefit.init(reactApplicationContext.applicationContext, buzzAdBenefitConfig)
 
@@ -45,11 +55,11 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
     val (userId, gender, birthYear) = buildUserInfo(requestUserInfo)
     userProfileBuilder.userId(userId)
 
-    if(gender != null) {
+    if (gender != null) {
       userProfileBuilder.gender(gender)
     }
 
-    if(birthYear != null) {
+    if (birthYear != null) {
       userProfileBuilder.birthYear(birthYear)
     }
 
@@ -76,6 +86,17 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
 
     return UserInfo(userId, gender, birthYear)
   }
+
+  private fun buildAdIdInfo(requestFeedIdInfo: ReadableMap?): FeedIdInfo {
+    var feedId: String? = null
+
+    if (requestFeedIdInfo?.hasKey("feedId") == true) {
+      feedId = requestFeedIdInfo.getString("feedId");
+    }
+
+    return FeedIdInfo(feedId)
+  }
+
 }
 
 

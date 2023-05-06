@@ -14,6 +14,6 @@ class BuzzvilPackage : ReactPackage {
   }
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return listOf(BuzzvilFeedViewManager(reactContext))
+    return listOf(BuzzVilFeedViewManager(reactContext))
   }
 }

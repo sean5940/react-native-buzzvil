@@ -1,10 +1,10 @@
 import { NativeModules } from 'react-native';
-import type { RequestUserInfo } from './types';
+import type { RequestFeedInfo, RequestUserInfo } from './types';
 
 const { BuzzvilAdModule } = NativeModules;
 
 interface BuzzvilAdModuleInterface {
-  initialize(): Promise<void>;
+  initialize(requestFeedInfo: RequestFeedInfo): Promise<void>;
   setUserInfo(requestUserInfo?: RequestUserInfo): Promise<void>;
 }
 
