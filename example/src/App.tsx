@@ -23,19 +23,27 @@ export default function App() {
           setShowFeed((pre) => !pre);
         }}
       />
-      <View style={{ flex: 1 }}>
-        {isShowFeed ? (
-          <FeedAds />
-        ) : (
-          <View style={{ flex: 1, backgroundColor: 'blue' }} />
-        )}
+      <View style={styles.container}>
+        <FeedAds />
+        <View style={[styles.screenBlocker, blockerHeight()]} />
       </View>
     </View>
   );
+
+  function blockerHeight() {
+    return { bottom: isShowFeed ? undefined : 0 };
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  screenBlocker: {
+    position: 'absolute',
+    backgroundColor: 'pink',
+    left: 0,
+    right: 0,
+    top: 0,
   },
 });
