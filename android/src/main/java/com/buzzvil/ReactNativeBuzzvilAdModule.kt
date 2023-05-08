@@ -27,12 +27,16 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
 
   @ReactMethod
   fun initialize(requestFeedInfo: ReadableMap?, promise: Promise) {
+    Log.d(name, "buzzAd initialize")
+
     val (feedId) = buildAdIdInfo(requestFeedInfo)
 
     val buzzAdBenefitConfig: BuzzAdBenefitConfig = if (feedId == null) {
       BuzzAdBenefitConfig.Builder(reactApplicationContext.applicationContext)
         .build()
     } else {
+      Log.d(name, "buzzAd feedId: $feedId")
+
       val feedConfig = FeedConfig.Builder(feedId)
         .build()
       BuzzAdBenefitConfig.Builder(reactApplicationContext.applicationContext)
@@ -41,8 +45,6 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
     }
 
     BuzzAdBenefit.init(reactApplicationContext.applicationContext, buzzAdBenefitConfig)
-
-    Log.d(name, "buzzAd initialize")
 
     promise.resolve(null)
   }
@@ -53,6 +55,11 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
     val userProfileBuilder = UserProfile.Builder(BuzzAdBenefit.getUserProfile())
 
     val (userId, gender, birthYear) = buildUserInfo(requestUserInfo)
+    Log.d(name, "setUserInfo userId: $userId")
+    Log.d(name, "setUserInfo gender: $gender")
+    Log.d(name, "setUserInfo birthYear: $birthYear")
+
+
     userProfileBuilder.userId(userId)
 
     if (gender != null) {
@@ -62,6 +69,8 @@ class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
     if (birthYear != null) {
       userProfileBuilder.birthYear(birthYear)
     }
+
+    BuzzAdBenefit.setUserProfile(userProfileBuilder.build());
 
     promise.resolve(null)
   }

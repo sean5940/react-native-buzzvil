@@ -11,6 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
+import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.presentation.feed.BuzzAdFeed
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
@@ -71,6 +72,17 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     setupLayout(parentView)
 
     val buzzAdFeed: BuzzAdFeed = BuzzAdFeed.Builder().build()
+    buzzAdFeed.load(object : BuzzAdFeed.FeedLoadListener {
+      override fun onSuccess() {
+        val feedTotalReward = buzzAdFeed.getAvailableRewards() // 적립 가능한 총 포인트 금액
+        Log.d(name, "feedTotalReward: $feedTotalReward")
+      }
+
+      override fun onError(error: AdError?) {
+        Log.d(name, "error: ${error.toString()}")
+        Log.d(name, "errorType: ${error?.adErrorType?.name}")
+      }
+    })
     val feedFragment = buzzAdFeed.getFragment()
     val activity = reactContext.currentActivity as FragmentActivity
 

@@ -11,7 +11,7 @@ export default function App() {
     BuzzvilAdModule.setUserInfo({
       userId: '1',
       gender: 'MALE',
-      birthYear: 2022,
+      birthYear: 1989,
     });
   }, []);
 
