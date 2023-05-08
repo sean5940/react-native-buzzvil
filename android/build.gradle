@@ -65,7 +65,7 @@ android {
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
     multiDexEnabled true
     manifestPlaceholders = [
-      appJSONBuzzvilAdsAppID                  : appJSONBuzzvilAdsAppIDString,
+      appJSONBuzzvilAdsAppID:appJSONBuzzvilAdsAppIDString,
     ]
   }
   buildTypes {
