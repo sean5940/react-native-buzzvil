@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.presentation.feed.BuzzAdFeed
+import com.buzzvil.buzzad.benefit.presentation.feed.FeedFragment
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.ThemedReactContext
@@ -39,6 +40,9 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   override fun getName() = "BuzzvilFeedViewManager"
 
   override fun createViewInstance(reactContext: ThemedReactContext): FrameLayout {
+    Log.d(name, "call createViewInstance")
+
+    deleteFragment()
     return FrameLayout(reactContext)
   }
 
@@ -53,43 +57,58 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   }
 
   override fun receiveCommand(root: FrameLayout, commandId: String?, args: ReadableArray?) {
-    super.receiveCommand(root, commandId, args)
     Log.d(name, "call receiveCommand $commandId")
-
-    val reactNativeViewId = args!!.getInt(0)
+    super.receiveCommand(root, commandId, args)
 
     when (commandId!!) {
-      COMMAND_CREATE -> createFragment(root, reactNativeViewId)
-      else -> {}
+      COMMAND_CREATE -> createFragment(root, args!!.getInt(0))
     }
   }
 
   private fun createFragment(root: FrameLayout, reactNativeViewId: Int) {
     Log.d(name, "call createFragment")
 
-    val parentView = root.findViewById(reactNativeViewId) as ViewGroup
-    parentView.parent
-    setupLayout(parentView)
+    val parentView = root.findViewById<ViewGroup>(reactNativeViewId)
 
-    val buzzAdFeed: BuzzAdFeed = BuzzAdFeed.Builder().build()
-    buzzAdFeed.load(object : BuzzAdFeed.FeedLoadListener {
-      override fun onSuccess() {
-        val feedTotalReward = buzzAdFeed.getAvailableRewards() // 적립 가능한 총 포인트 금액
-        Log.d(name, "feedTotalReward: $feedTotalReward")
-      }
+    if (parentView != null) {
+      setupLayout(parentView)
 
-      override fun onError(error: AdError?) {
-        Log.d(name, "error: ${error.toString()}")
-        Log.d(name, "errorType: ${error?.adErrorType?.name}")
-      }
-    })
-    val feedFragment = buzzAdFeed.getFragment()
+      val buzzAdFeed: BuzzAdFeed = BuzzAdFeed.Builder().build()
+      buzzAdFeed.load(object : BuzzAdFeed.FeedLoadListener {
+        override fun onSuccess() {
+          val feedTotalReward = buzzAdFeed.getAvailableRewards() // 적립 가능한 총 포인트 금액
+          Log.d(name, "feedTotalReward: $feedTotalReward")
+        }
+
+        override fun onError(error: AdError?) {
+          Log.d(name, "error: ${error.toString()}")
+          Log.d(name, "errorType: ${error?.adErrorType?.name}")
+        }
+      })
+
+      val feedFragment = buzzAdFeed.getFragment()
+      val activity = reactContext.currentActivity as FragmentActivity
+
+      activity.supportFragmentManager
+        .beginTransaction()
+        .replace(reactNativeViewId, feedFragment)
+        .commitAllowingStateLoss()
+    }
+  }
+
+  private fun deleteFragment() {
+    var fragmentCount = 0;
     val activity = reactContext.currentActivity as FragmentActivity
 
-    activity.supportFragmentManager
-      .beginTransaction()
-      .replace(reactNativeViewId, feedFragment)
-      .commit()
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    activity.supportFragmentManager.fragments.filterIsInstance<FeedFragment>()
+      .forEach { feedFragment ->
+        ++fragmentCount
+        transaction.remove(feedFragment)
+      }
+    transaction.commit()
+
+    Log.d(name,"fragment Count:$fragmentCount")
   }
 
   private fun setupLayout(view: View) {

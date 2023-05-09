@@ -21,6 +21,8 @@ import com.buzzvil.BuildConfig;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,8 +69,8 @@ public class ReactNativeJSON {
     return jsonObject.optString(key, defaultValue);
   }
 
-  public ArrayList<String> getArrayValue(String key) {
-    ArrayList<String> result = new ArrayList<String>();
+  public List<String> getArrayValue(String key) {
+    List<String> result = new ArrayList<>();
     if (jsonObject == null) return result;
 
     try {

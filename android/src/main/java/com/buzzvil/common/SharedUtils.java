@@ -58,6 +58,10 @@ public class SharedUtils {
   private static final String REACT_NATIVE_REGISTRY_CLASS = "NativeModuleRegistry";
   private static final String REACT_NATIVE_CORE_PACKAGE = "com.facebook.react.bridge";
 
+  private SharedUtils() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static int[] rectToIntArray(@Nullable Rect rect) {
     if (rect == null || rect.isEmpty()) return new int[] {};
     return new int[] {rect.left, rect.top, rect.right, rect.bottom};
@@ -127,14 +131,14 @@ public class SharedUtils {
     // Check if current activity is a background activity
     ReactNativeJSON json = ReactNativeJSON.getSharedInstance();
     if (json.contains("android_background_activity_names")) {
-      ArrayList<String> backgroundActivities =
+      List<String> backgroundActivities =
           json.getArrayValue("android_background_activity_names");
 
-      if (backgroundActivities.size() != 0) {
+      if (!backgroundActivities.isEmpty()) {
         String currentActivity = "";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
           List<ActivityManager.AppTask> taskInfo = activityManager.getAppTasks();
-          if (taskInfo.size() > 0) {
+          if (!taskInfo.isEmpty()) {
             ActivityManager.RecentTaskInfo task = taskInfo.get(0).getTaskInfo();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
               currentActivity = task.baseActivity.getShortClassName();
@@ -147,7 +151,7 @@ public class SharedUtils {
           }
         } else {
           List<ActivityManager.RunningTaskInfo> taskInfo = activityManager.getRunningTasks(1);
-          if (taskInfo.size() > 0) {
+          if (!taskInfo.isEmpty()) {
             currentActivity = taskInfo.get(0).topActivity.getShortClassName();
           }
         }

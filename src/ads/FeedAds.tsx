@@ -8,11 +8,7 @@ import {
 
 const createFragment = (viewId: number | null) => {
   console.log('[FeedViewManager] call createFragment:', viewId);
-  try {
-    UIManager.dispatchViewManagerCommand(viewId, 'create', [viewId]);
-  } catch (e) {
-    console.log('error', e);
-  }
+  UIManager.dispatchViewManagerCommand(viewId, 'create', [viewId]);
 };
 
 export const FeedAds: React.FC<{ width?: number; height?: number }> = ({
