@@ -1,6 +1,7 @@
 package com.buzzvil
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.os.Build
 import android.util.DisplayMetrics
@@ -125,7 +126,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
       ViewGroup.LayoutParams.MATCH_PARENT,
       TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
-        50f,
+        40f,
         reactContext.resources.displayMetrics
       ).toInt()
     )
@@ -159,7 +160,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     title.text = this.title
     title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
     title.typeface = Typeface.create(title.typeface, Typeface.BOLD)
-    title.setTextColor(reactContext.resources.getColor(R.color.bz_feed_header_text))
+    title.setTextColor(reactContext.resources.getColor(R.color.ba_feed_activity_toolbar_title_text))
     header.addView(title)
 
     val space: View = View(reactContext)
@@ -217,6 +218,9 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     inquiryView.setOnClickListener {
       BuzzAdBenefit.getInstance().showInquiryPage(reactContext, unitId)
     }
+
+    inquiryView.imageTintList =
+      ColorStateList.valueOf(reactContext.resources.getColor(R.color.ba_feed_activity_toolbar_title_text))
 
     return inquiryView;
   }
