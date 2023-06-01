@@ -1,28 +1,23 @@
 package com.buzzvil
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Typeface
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.TypedValue
 import android.view.Choreographer
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
-import com.buzzvil.buzzad.benefit.BuzzAdBenefit
 import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.presentation.feed.BuzzAdFeed
 import com.buzzvil.buzzad.benefit.presentation.feed.FeedConfig
 import com.buzzvil.buzzad.benefit.presentation.feed.FeedFragment
 import com.buzzvil.model.ScreenSize
+import com.buzzvil.views.CustomFeedHeaderViewAdapter
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.ThemedReactContext
@@ -46,7 +41,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
   private val reactContext: ReactApplicationContext
 
-  private var inquiryView: ImageView? = null;
+  private var inquiryView: ImageView? = null
 
   init {
     this.reactContext = reactContext
@@ -69,7 +64,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     Log.d(name, "call onDropViewInstance")
     deleteFragment()
     inquiryView?.setOnClickListener(null)
-    inquiryView = null;
+    inquiryView = null
     super.onDropViewInstance(view)
   }
 
@@ -112,76 +107,19 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     if (parentView != null) {
       setupLayout(parentView)
 
-      createHeader(root)
       createFeedFragment(reactNativeViewId)
 
     }
   }
 
-  private fun createHeader(root: LinearLayout) {
-    val header: LinearLayout = LinearLayout(reactContext)
-
-
-    val headerLayoutParams = LinearLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT,
-      TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        40f,
-        reactContext.resources.displayMetrics
-      ).toInt()
-    )
-
-    header.layoutParams = headerLayoutParams
-    header.orientation = LinearLayout.HORIZONTAL
-    header.gravity = Gravity.CENTER_VERTICAL
-    header.background = reactContext.resources.getDrawable(R.color.bz_feed_toolbar_default)
-
-    val paddingHorizontal = TypedValue.applyDimension(
-      TypedValue.COMPLEX_UNIT_DIP,
-      10f,
-      reactContext.resources.displayMetrics
-    ).toInt()
-
-    val paddingVertical = TypedValue.applyDimension(
-      TypedValue.COMPLEX_UNIT_DIP,
-      5f,
-      reactContext.resources.displayMetrics
-    ).toInt()
-
-    header.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
-
-    val title: TextView = TextView(reactContext)
-
-    title.layoutParams = LinearLayout.LayoutParams(
-      ViewGroup.LayoutParams.WRAP_CONTENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-
-    title.text = this.title
-    title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
-    title.typeface = Typeface.create(title.typeface, Typeface.BOLD)
-    title.setTextColor(reactContext.resources.getColor(R.color.ba_feed_activity_toolbar_title_text))
-    header.addView(title)
-
-    val space: View = View(reactContext)
-    space.layoutParams = LinearLayout.LayoutParams(
-      0,
-      ViewGroup.LayoutParams.WRAP_CONTENT,
-      1f
-    )
-    header.addView(space)
-
-    inquiryView = createInquiryView()
-    header.addView(inquiryView)
-
-    root.addView(header);
-  }
-
   private fun createFeedFragment(reactNativeViewId: Int) {
+
     val feedConfig = FeedConfig.Builder(unitId)
+      .feedHeaderViewAdapterClass(CustomFeedHeaderViewAdapter().javaClass)
       .build()
 
     val buzzAdFeed: BuzzAdFeed = BuzzAdFeed.Builder().feedConfig(feedConfig).build()
+
     buzzAdFeed.load(object : BuzzAdFeed.FeedLoadListener {
 
       override fun onSuccess() {
@@ -196,33 +134,23 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
     })
 
     val feedFragment = buzzAdFeed.getFragment()
+
     val activity = reactContext.currentActivity as FragmentActivity
 
     activity.supportFragmentManager
       .beginTransaction()
       .replace(reactNativeViewId, feedFragment)
+      .runOnCommit {
+
+        val feedHeader = feedFragment::class.java.declaredFields.single {
+          it.type.toString().endsWith("FeedHeaderViewAdapter")
+        }.apply { isAccessible = true }.get(feedFragment) as CustomFeedHeaderViewAdapter
+
+        feedHeader.setUnitId(unitId)
+        feedHeader.setTitle(title)
+
+      }
       .commitAllowingStateLoss()
-  }
-
-  private fun createInquiryView(): ImageView {
-    val inquiryView = ImageView(reactContext)
-    inquiryView.setImageResource(R.drawable.inquiry)
-
-    val layoutParams = LinearLayout.LayoutParams(
-      ViewGroup.LayoutParams.WRAP_CONTENT,
-      ViewGroup.LayoutParams.WRAP_CONTENT
-    )
-
-    inquiryView.layoutParams = layoutParams
-
-    inquiryView.setOnClickListener {
-      BuzzAdBenefit.getInstance().showInquiryPage(reactContext, unitId)
-    }
-
-    inquiryView.imageTintList =
-      ColorStateList.valueOf(reactContext.resources.getColor(R.color.ba_feed_activity_toolbar_title_text))
-
-    return inquiryView;
   }
 
   private fun deleteFragment() {
