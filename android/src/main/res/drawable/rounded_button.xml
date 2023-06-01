@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <solid android:color="@color/cta_button_bg" /> <!-- 버튼의 배경색 -->
+  <corners android:radius="50dp" /> <!-- 버튼의 모서리 반지름 -->
+</shape>

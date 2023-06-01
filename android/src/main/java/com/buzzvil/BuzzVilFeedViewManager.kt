@@ -14,10 +14,12 @@ import androidx.fragment.app.FragmentActivity
 import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.presentation.feed.BuzzAdFeed
 import com.buzzvil.buzzad.benefit.presentation.feed.FeedFragment
+import com.buzzvil.model.ScreenSize
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
+import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
 
 
@@ -75,6 +77,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
       val buzzAdFeed: BuzzAdFeed = BuzzAdFeed.Builder().build()
       buzzAdFeed.load(object : BuzzAdFeed.FeedLoadListener {
+
         override fun onSuccess() {
           val feedTotalReward = buzzAdFeed.getAvailableRewards() // 적립 가능한 총 포인트 금액
           Log.d(name, "feedTotalReward: $feedTotalReward")
@@ -108,7 +111,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
       }
     transaction.commit()
 
-    Log.d(name,"fragment Count:$fragmentCount")
+    Log.d(name, "fragment Count:$fragmentCount")
   }
 
   private fun setupLayout(view: View) {
@@ -163,10 +166,6 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
       val displayMetrics = DisplayMetrics()
       wm.defaultDisplay.getMetrics(displayMetrics)
       ScreenSize(displayMetrics.widthPixels, displayMetrics.heightPixels)
-
     }
   }
-
 }
-
-data class ScreenSize(val width: Int, val height: Int)

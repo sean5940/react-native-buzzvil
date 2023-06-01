@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center"
+  android:paddingVertical="5dp"
+  android:paddingHorizontal="10dp"
+  android:background="@drawable/rounded_button">
+
+    <ImageView
+      android:id="@+id/imageReward"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:srcCompat="@drawable/mileage_icon"
+      android:layout_marginRight="2dp"/>
+
+    <TextView
+      android:id="@+id/textCta"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="1,000"
+      android:textStyle="bold"
+      android:textColor="@color/black"
+      android:layout_marginTop="-2dp"
+      android:textSize="16sp"
+      />
+</androidx.appcompat.widget.LinearLayoutCompat>

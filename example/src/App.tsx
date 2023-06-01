@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import BuzzvilAdModule, { FeedAds } from 'react-native-buzzvil';
+import BuzzvilAdModule, { FeedAds, NativeAd } from 'react-native-buzzvil';
 
 const windowWidth = Dimensions.get('window').width;
 let pageCount = 0;
@@ -45,8 +45,15 @@ export default function App() {
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
       >
-        <View style={[styles.container, { width: windowWidth }]}>
-          <Text>page1</Text>
+        <View style={[styles.defaultContain, { width: windowWidth }]}>
+          <View style={styles.nativeAdContainer}>
+            <NativeAd
+              unitId="252290577659165"
+              width={240}
+              height={235}
+              bgColor="#F1EDED"
+            />
+          </View>
         </View>
 
         <View style={{ width: windowWidth }}>
@@ -62,15 +69,24 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  defaultContain: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  nativeAdContainer: {
+    left: 88,
+    right: 88,
+    top: 250,
+    bottom: 330,
+    position: 'absolute',
+  },
   screenBlocker: {
     position: 'absolute',
     backgroundColor: 'pink',
-
     left: 0,
     right: 0,
     top: 0,

@@ -1,0 +1,107 @@
+<com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2View xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/nativeAd2View"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp">
+
+    <ImageView
+      android:id="@+id/imageIcon"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+      android:id="@+id/header"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="5dp"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="@+id/imageIcon"
+      app:layout_constraintLeft_toRightOf="@+id/imageIcon"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/imageIcon">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/textTitle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="2"
+          android:ellipsize="end"
+          android:maxLines="1"
+          android:textColor="@color/black"
+          android:textSize="14sp"
+          android:textStyle="bold" />
+
+        <Space
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_weight="1" />
+
+        <com.buzzvil.buzzad.benefit.presentation.feed.navigation.NativeToFeedLayout
+          android:id="@+id/native_to_feed_layout"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="center">
+
+          <TextView
+            android:id="@+id/textCta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_btn_with_border"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="@string/more_point"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+        </com.buzzvil.buzzad.benefit.presentation.feed.navigation.NativeToFeedLayout>
+
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <com.buzzvil.buzzad.benefit.presentation.media.MediaView
+      android:id="@+id/mediaView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageIcon" />
+
+    <com.buzzvil.views.CustomCtaView
+      android:id="@+id/ctaView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/mediaView" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2View>
