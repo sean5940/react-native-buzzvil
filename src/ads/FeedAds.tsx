@@ -11,10 +11,11 @@ const createFragment = (viewId: number | null) => {
   UIManager.dispatchViewManagerCommand(viewId, 'create', [viewId]);
 };
 
-export const FeedAds: React.FC<{ width?: number; height?: number }> = ({
-  width = 0,
-  height = 0,
-}) => {
+export const FeedAds: React.FC<{
+  unitId: string;
+  width?: number;
+  height?: number;
+}> = ({ unitId, width = 0, height = 0 }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export const FeedAds: React.FC<{ width?: number; height?: number }> = ({
 
   return (
     <FeedViewManager
+      unitId={unitId}
       style={{
         width: PixelRatio.getPixelSizeForLayoutSize(width),
         height: PixelRatio.getPixelSizeForLayoutSize(height),
@@ -35,6 +37,7 @@ export const FeedAds: React.FC<{ width?: number; height?: number }> = ({
 };
 
 interface FeedViewManagerProps {
+  unitId: string;
   style: {
     width: number;
     height: number;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   Button,
@@ -15,6 +15,7 @@ let pageCount = 0;
 
 export default function App() {
   const scrollViewRef = useRef<ScrollView>(null);
+  const [showNativeAd, setShowNativeAd] = useState<boolean>(false);
 
   useEffect(() => {
     BuzzvilAdModule.initialize({ feedId: '293169052486685' });
@@ -46,6 +47,14 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
       >
         <View style={[styles.defaultContain, { width: windowWidth }]}>
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
+            <Button
+              onPress={() => {
+                setShowNativeAd((pre) => !pre);
+              }}
+              title={showNativeAd ? '네이티브 광고 숨김' : '네이티브 광고 노출'}
+            />
+          </View>
           <View style={styles.nativeAdContainer}>
             <NativeAd
               unitId="252290577659165"
@@ -54,10 +63,22 @@ export default function App() {
               bgColor="#F1EDED"
             />
           </View>
+          {!showNativeAd && (
+            <View
+              style={{
+                left: 75,
+                right: 75,
+                top: 240,
+                bottom: 320,
+                position: 'absolute',
+                backgroundColor: 'pink',
+              }}
+            />
+          )}
         </View>
 
         <View style={{ width: windowWidth }}>
-          <FeedAds />
+          <FeedAds unitId="293169052486685" />
         </View>
 
         <View style={[styles.container, { width: windowWidth }]}>

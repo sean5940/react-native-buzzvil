@@ -14,11 +14,17 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 
 
-class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext?) :
+class ReactNativeBuzzvilAdModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
+
+  private val reactContext: ReactApplicationContext;
 
   companion object {
     const val NAME = "BuzzvilAdModule"
+  }
+
+  init {
+    this.reactContext = reactContext
   }
 
   override fun getName(): String {

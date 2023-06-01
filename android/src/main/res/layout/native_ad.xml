@@ -63,11 +63,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_btn_with_border"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="6dp"
             android:paddingVertical="3dp"
             android:text="@string/more_point"
             android:textColor="@color/black"
-            android:textSize="11sp"
+            android:textSize="9sp"
             android:textStyle="bold" />
         </com.buzzvil.buzzad.benefit.presentation.feed.navigation.NativeToFeedLayout>
 
