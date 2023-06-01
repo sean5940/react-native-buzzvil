@@ -16,13 +16,17 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import com.buzzvil.buzzad.benefit.BuzzAdBenefit
 import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2
+import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2EventListener
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2StateChangedListener
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2View
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2ViewBinder
 import com.buzzvil.buzzad.benefit.presentation.feed.navigation.NativeToFeedLayout
+import com.buzzvil.buzzad.benefit.presentation.media.CtaView
 import com.buzzvil.buzzad.benefit.presentation.media.MediaView
+import com.buzzvil.buzzad.benefit.presentation.reward.RewardResult
 import com.buzzvil.model.ScreenSize
 import com.buzzvil.views.CustomCtaView
 import com.facebook.react.bridge.ReactApplicationContext
@@ -85,7 +89,6 @@ class BuzzVilNativeViewManager(reactContext: ReactApplicationContext) :
     if (index == 1) {
       propHeight = value
     }
-
   }
 
   override fun receiveCommand(root: FrameLayout, commandId: String?, args: ReadableArray?) {
@@ -108,11 +111,14 @@ class BuzzVilNativeViewManager(reactContext: ReactApplicationContext) :
       val view = inflate(reactContext, R.layout.native_ad, parentView)
       val nativeAd2View = view.findViewById<NativeAd2View>(R.id.nativeAd2View)
       nativeAd2View.background = backgroundDrawable
+
       val mediaView = view.findViewById<MediaView>(R.id.mediaView)
       val titleTextView = view.findViewById<TextView>(R.id.textTitle)
       val descriptionTextView = view.findViewById<TextView>(R.id.textDescription)
       val iconImageView = view.findViewById<ImageView>(R.id.imageIcon)
+
       val ctaView = view.findViewById<CustomCtaView>(R.id.ctaView)
+
       val nativeToFeedLayout = view.findViewById<NativeToFeedLayout>(R.id.native_to_feed_layout)
       nativeToFeedLayout.setNativeUnitId(unitId)
 
@@ -153,6 +159,29 @@ class BuzzVilNativeViewManager(reactContext: ReactApplicationContext) :
             binder.bind()
           }, 3, TimeUnit.SECONDS)
         }
+      })
+
+      binder.addNativeAd2EventListener(object:NativeAd2EventListener{
+        override fun onClicked(nativeAd2: NativeAd2) {
+          Log.d(name, "onClicked")
+        }
+
+        override fun onImpressed(nativeAd2: NativeAd2) {
+          Log.d(name, "onImpressed")
+        }
+
+        override fun onParticipated(nativeAd2: NativeAd2) {
+          Log.d(name, "onParticipated")
+        }
+
+        override fun onRewardRequested(nativeAd2: NativeAd2) {
+          Log.d(name, "onRewardRequested")
+        }
+
+        override fun onRewarded(nativeAd2: NativeAd2, rewardResult: RewardResult) {
+          Log.d(name, "onRewarded")
+        }
+
       })
 
       binder.bind()
