@@ -40,6 +40,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   private var propWidth = 0
   private var propHeight = 0
   private var unitId = ""
+  private var title = ""
 
 
   private val reactContext: ReactApplicationContext
@@ -75,6 +76,12 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   fun setUnitId(view: LinearLayout?, unitId: String) {
     Log.d(name, "call setUnitId")
     this.unitId = unitId
+  }
+
+  @ReactProp(name = "title")
+  fun setTitle(view: LinearLayout?, title: String) {
+    Log.d(name, "call setTitle")
+    this.title = title
   }
 
   @ReactPropGroup(names = ["width", "height"], customType = "Style")
@@ -149,7 +156,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
       ViewGroup.LayoutParams.WRAP_CONTENT
     )
 
-    title.text = "적립 찬스!"
+    title.text = this.title
     title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
     title.typeface = Typeface.create(title.typeface, Typeface.BOLD)
     title.setTextColor(reactContext.resources.getColor(R.color.bz_feed_header_text))

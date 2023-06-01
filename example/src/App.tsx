@@ -78,7 +78,7 @@ export default function App() {
         </View>
 
         <View style={{ width: windowWidth }}>
-          <FeedAds unitId="293169052486685" />
+          <FeedAds unitId="293169052486685" title="테스트 타이틀" />
         </View>
 
         <View style={[styles.container, { width: windowWidth }]}>

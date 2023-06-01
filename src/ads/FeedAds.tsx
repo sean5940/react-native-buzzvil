@@ -13,9 +13,10 @@ const createFragment = (viewId: number | null) => {
 
 export const FeedAds: React.FC<{
   unitId: string;
+  title?: string;
   width?: number;
   height?: number;
-}> = ({ unitId, width = 0, height = 0 }) => {
+}> = ({ unitId, width = 0, height = 0, title = '적립 찬스!' }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export const FeedAds: React.FC<{
 
   return (
     <FeedViewManager
+      title={title}
       unitId={unitId}
       style={{
         width: PixelRatio.getPixelSizeForLayoutSize(width),
@@ -37,6 +39,7 @@ export const FeedAds: React.FC<{
 };
 
 interface FeedViewManagerProps {
+  title: string;
   unitId: string;
   style: {
     width: number;
