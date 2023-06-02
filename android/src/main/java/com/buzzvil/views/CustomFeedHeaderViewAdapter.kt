@@ -13,22 +13,42 @@ import com.buzzvil.buzzad.benefit.presentation.feed.header.FeedHeaderViewAdapter
 
 
 class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
-  private var title: String = "적립 찬스!"
+
+  private var reward:Int = 0
   private var unitId: String = ""
   private var inquiryImage: ImageView? = null
+  private var titleTextView: TextView? = null
+  private var rewardTextView: TextView? = null
+  private var rewardText:String =""
 
   companion object {
-    private const val name:String = "FeedHeaderViewAdapter"
+    private const val name: String = "FeedHeaderViewAdapter"
   }
 
-  fun setUnitId(unitId:String) {
-    Log.d(name, "setUnitId: ${unitId}")
+  fun setUnitId(unitId: String) {
+    Log.d(name, "setUnitId: $unitId")
     this.unitId = unitId
   }
 
-  fun setTitle(title:String){
-    Log.d(name, "setTitle: ${title}")
-    this.title = title
+  fun setTitle(title: String) {
+    Log.d(name, "setTitle: $title")
+    titleTextView?.text = title
+    titleTextView?.visibility = if (title.isEmpty()) {
+      TextView.GONE
+    } else {
+      TextView.VISIBLE
+    }
+  }
+
+  fun setRewardText(text: String) {
+    Log.d(name, "setRewardText: $text")
+    this.rewardText = text
+    rewardTextView?.text = String.format("$text%d",this.reward)
+    rewardTextView?.visibility = if (text.isEmpty()) {
+      TextView.GONE
+    } else {
+      TextView.VISIBLE
+    }
   }
 
   override fun onCreateView(context: Context, parent: ViewGroup): View {
@@ -38,7 +58,8 @@ class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
   }
 
   override fun onBindView(view: View, reward: Int) {
-    Log.d(name, "onBindView")
+    this.reward = reward
+    Log.d(name, "onBindView reward:$reward")
 
     inquiryImage = view.findViewById(R.id.inquiry)
     inquiryImage!!.setOnClickListener {
@@ -47,8 +68,12 @@ class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
       BuzzAdBenefit.getInstance().showInquiryPage(view.context, unitId)
     }
 
-    val titleText = view.findViewById<TextView>(R.id.feedHeaderTitle)
-    titleText.text = title
+    titleTextView = view.findViewById(R.id.feedHeaderTitle)
+    rewardTextView = view.findViewById(R.id.rewardText)
+
+    if(rewardTextView?.visibility != TextView.GONE){
+      rewardTextView?.text = String.format("${rewardText}%d",this.reward)
+    }
   }
 
   override fun onDestroyView() {

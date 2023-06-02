@@ -16,6 +16,18 @@
     app:layout_constraintBottom_toBottomOf="parent"
     android:textStyle="bold"
     android:textSize="16sp"
+    android:paddingRight="5dp"
+    android:textColor="@color/ba_feed_activity_toolbar_title_text"
+    />
+
+  <TextView
+    android:id="@+id/rewardText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintLeft_toRightOf="@id/feedHeaderTitle"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:textSize="13sp"
     android:textColor="@color/ba_feed_activity_toolbar_title_text"
     />
 

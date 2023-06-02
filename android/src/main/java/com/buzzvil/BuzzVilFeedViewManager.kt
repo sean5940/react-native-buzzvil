@@ -37,6 +37,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   private var propHeight = 0
   private var unitId = ""
   private var title = ""
+  private var rewardText = ""
 
 
   private val reactContext: ReactApplicationContext
@@ -77,6 +78,12 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   fun setTitle(view: LinearLayout?, title: String) {
     Log.d(name, "call setTitle")
     this.title = title
+  }
+
+  @ReactProp(name = "rewardText")
+  fun setRewardText(view: LinearLayout?, rewardText: String) {
+    Log.d(name, "call setRewardText")
+    this.rewardText = rewardText
   }
 
   @ReactPropGroup(names = ["width", "height"], customType = "Style")
@@ -149,6 +156,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
         feedHeader.setUnitId(unitId)
         feedHeader.setTitle(title)
+        feedHeader.setRewardText(rewardText)
 
       }
       .commitAllowingStateLoss()
