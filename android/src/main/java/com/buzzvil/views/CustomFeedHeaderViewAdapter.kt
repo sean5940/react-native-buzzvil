@@ -10,9 +10,12 @@ import android.widget.TextView
 import com.buzzvil.R
 import com.buzzvil.buzzad.benefit.BuzzAdBenefit
 import com.buzzvil.buzzad.benefit.presentation.feed.header.FeedHeaderViewAdapter
+import java.text.DecimalFormat
 
 
 class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
+
+  private val rewardDecFormat:DecimalFormat = DecimalFormat("#,###")
 
   private var reward:Int = 0
   private var unitId: String = ""
@@ -43,7 +46,7 @@ class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
   fun setRewardText(text: String) {
     Log.d(name, "setRewardText: $text")
     this.rewardText = text
-    rewardTextView?.text = String.format("$text%d",this.reward)
+    rewardTextView?.text = "${rewardText}${rewardDecFormat.format(this.reward)}"
     rewardTextView?.visibility = if (text.isEmpty()) {
       TextView.GONE
     } else {
@@ -72,7 +75,7 @@ class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
     rewardTextView = view.findViewById(R.id.rewardText)
 
     if(rewardTextView?.visibility != TextView.GONE){
-      rewardTextView?.text = String.format("${rewardText}%d",this.reward)
+      rewardTextView?.text = "${rewardText}${rewardDecFormat.format(this.reward)}"
     }
   }
 
