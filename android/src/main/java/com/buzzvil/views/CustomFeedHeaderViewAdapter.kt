@@ -13,7 +13,7 @@ import com.buzzvil.buzzad.benefit.presentation.feed.header.FeedHeaderViewAdapter
 
 
 class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
-  private var title: String = "타이틀"
+  private var title: String = "적립 찬스!"
   private var unitId: String = ""
   private var inquiryImage: ImageView? = null
 
@@ -22,12 +22,12 @@ class CustomFeedHeaderViewAdapter : FeedHeaderViewAdapter {
   }
 
   fun setUnitId(unitId:String) {
-    Log.d(name, "setUnitId")
+    Log.d(name, "setUnitId: ${unitId}")
     this.unitId = unitId
   }
 
   fun setTitle(title:String){
-    Log.d(name, "setTitle")
+    Log.d(name, "setTitle: ${title}")
     this.title = title
   }
 

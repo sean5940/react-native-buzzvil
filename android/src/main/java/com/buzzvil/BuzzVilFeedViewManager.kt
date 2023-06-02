@@ -41,6 +41,7 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
   private val reactContext: ReactApplicationContext
 
+  private var feedFragment: FeedFragment? = null
   private var inquiryView: ImageView? = null
 
   init {
@@ -51,8 +52,6 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
   override fun createViewInstance(reactContext: ThemedReactContext): LinearLayout {
     Log.d(name, "call createViewInstance")
-
-    deleteFragment()
 
     val layout = LinearLayout(reactContext)
     layout.orientation = LinearLayout.VERTICAL
@@ -114,6 +113,8 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
 
   private fun createFeedFragment(reactNativeViewId: Int) {
 
+    val activity = reactContext.currentActivity as FragmentActivity
+
     val feedConfig = FeedConfig.Builder(unitId)
       .feedHeaderViewAdapterClass(CustomFeedHeaderViewAdapter().javaClass)
       .build()
@@ -133,18 +134,18 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
       }
     })
 
-    val feedFragment = buzzAdFeed.getFragment()
-
-    val activity = reactContext.currentActivity as FragmentActivity
+    feedFragment = buzzAdFeed.getFragment()
 
     activity.supportFragmentManager
       .beginTransaction()
-      .replace(reactNativeViewId, feedFragment)
+      .replace(reactNativeViewId, feedFragment!!)
       .runOnCommit {
 
-        val feedHeader = feedFragment::class.java.declaredFields.single {
+        val feedHeader = feedFragment!!::class.java.declaredFields.single {
           it.type.toString().endsWith("FeedHeaderViewAdapter")
-        }.apply { isAccessible = true }.get(feedFragment) as CustomFeedHeaderViewAdapter
+        }.apply { isAccessible = true }.get(feedFragment!!) as CustomFeedHeaderViewAdapter
+
+        Log.d(name, "create feedHeader")
 
         feedHeader.setUnitId(unitId)
         feedHeader.setTitle(title)
@@ -154,18 +155,12 @@ class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
   }
 
   private fun deleteFragment() {
-    var fragmentCount = 0;
-    val activity = reactContext.currentActivity as FragmentActivity
+    if (feedFragment != null) {
+      val activity = reactContext.currentActivity as FragmentActivity
+      activity.supportFragmentManager.beginTransaction().remove(feedFragment!!).commit()
+      feedFragment == null;
+    }
 
-    val transaction = activity.supportFragmentManager.beginTransaction()
-    activity.supportFragmentManager.fragments.filterIsInstance<FeedFragment>()
-      .forEach { feedFragment ->
-        ++fragmentCount
-        transaction.remove(feedFragment)
-      }
-    transaction.commit()
-
-    Log.d(name, "fragment Count:$fragmentCount")
   }
 
   private fun setupLayout(view: View) {
