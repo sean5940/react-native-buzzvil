@@ -46,6 +46,10 @@ export default function App() {
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
       >
+        <View style={[styles.container, { width: windowWidth }]}>
+          <FeedAds unitId="293169052486685" rewardText="적립 가능 캐시 ⓒ " />
+        </View>
+
         <View style={[styles.defaultContain, { width: windowWidth }]}>
           <View style={{ alignItems: 'center', marginTop: 20 }}>
             <Button
@@ -75,10 +79,6 @@ export default function App() {
               }}
             />
           )}
-        </View>
-
-        <View style={[styles.container, { width: windowWidth }]}>
-          <FeedAds unitId="293169052486685" rewardText="적립 가능 캐시 ⓒ " />
         </View>
 
         <View style={[styles.container, { width: windowWidth }]}>

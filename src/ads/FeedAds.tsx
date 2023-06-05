@@ -24,6 +24,15 @@ export const FeedAds: React.FC<{
     const viewId = findNodeHandle(ref.current);
     console.log('[FeedViewManager] viewId:', viewId);
     createFragment(viewId);
+
+    //feed 처음에 버튼이 동작하지 않아서 500ms 후에 한번더 생성
+    const timer = setTimeout(() => {
+      createFragment(viewId);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
