@@ -16,7 +16,6 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import com.buzzvil.buzzad.benefit.BuzzAdBenefit
 import com.buzzvil.buzzad.benefit.core.ad.AdError
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2EventListener
@@ -24,17 +23,19 @@ import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2StateChangedListener
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2View
 import com.buzzvil.buzzad.benefit.nativead2.api.NativeAd2ViewBinder
 import com.buzzvil.buzzad.benefit.presentation.feed.navigation.NativeToFeedLayout
-import com.buzzvil.buzzad.benefit.presentation.media.CtaView
 import com.buzzvil.buzzad.benefit.presentation.media.MediaView
 import com.buzzvil.buzzad.benefit.presentation.reward.RewardResult
 import com.buzzvil.model.ScreenSize
 import com.buzzvil.views.CustomCtaView
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
+import com.facebook.react.uimanager.events.RCTEventEmitter
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -137,55 +138,95 @@ class BuzzVilNativeViewManager(reactContext: ReactApplicationContext) :
         override fun onRequested() {
           Log.d(name, "onRequested")
           hideView(parentView)
-
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onRequested", null)
         }
 
         override fun onNext(nativeAd2: NativeAd2) {
           Log.d(name, "onNext")
           showView(parentView)
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onNext", null)
 
         }
 
         override fun onComplete() {
           Log.d(name, "onComplete")
           showView(parentView)
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onComplete", null)
         }
 
         override fun onError(adError: AdError) {
-          Log.d(name, "error: $adError")
+          Log.d(name, "error: ${adError.message}")
           Log.d(name, "errorType: ${adError?.adErrorType?.name}")
           hideView(parentView)
           Executors.newSingleThreadScheduledExecutor().schedule({
             binder.bind()
-          }, 3, TimeUnit.SECONDS)
+          }, 10, TimeUnit.SECONDS)
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onError", Arguments.createMap().apply { putString("error", adError?.adErrorType?.name) })
         }
       })
 
       binder.addNativeAd2EventListener(object:NativeAd2EventListener{
         override fun onClicked(nativeAd2: NativeAd2) {
           Log.d(name, "onClicked")
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onClicked", null)
         }
 
         override fun onImpressed(nativeAd2: NativeAd2) {
           Log.d(name, "onImpressed")
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onImpressed", null)
         }
 
         override fun onParticipated(nativeAd2: NativeAd2) {
           Log.d(name, "onParticipated")
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onParticipated", null)
         }
 
         override fun onRewardRequested(nativeAd2: NativeAd2) {
           Log.d(name, "onRewardRequested")
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onRewardRequested", null)
         }
 
         override fun onRewarded(nativeAd2: NativeAd2, rewardResult: RewardResult) {
           Log.d(name, "onRewarded")
+          reactContext
+            .getJSModule(RCTEventEmitter::class.java)
+            .receiveEvent(root.id, "onRewarded", null)
         }
-
       })
 
       binder.bind()
     }
+  }
+
+  override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Any?>? {
+    val superTypeConstants = super.getExportedCustomDirectEventTypeConstants()
+    val export = superTypeConstants ?: MapBuilder.newHashMap<String, Any?>()
+    export["onClicked"] = MapBuilder.of("registrationName", "onClicked")
+    export["onImpressed"] = MapBuilder.of("registrationName", "onImpressed")
+    export["onParticipated"] = MapBuilder.of("registrationName", "onParticipated")
+    export["onRewardRequested"] = MapBuilder.of("registrationName", "onRewardRequested")
+    export["onRewarded"] = MapBuilder.of("registrationName", "onRewarded")
+    export["onRequested"] = MapBuilder.of("registrationName", "onRequested")
+    export["onNext"] = MapBuilder.of("registrationName", "onNext")
+    export["onComplete"] = MapBuilder.of("registrationName", "onComplete")
+    export["onError"] = MapBuilder.of("registrationName", "onError")
+    return export
   }
 
   private fun setupLayout(view: View) {

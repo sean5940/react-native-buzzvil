@@ -16,7 +16,30 @@ export const NativeAd: React.FC<{
   width?: number;
   height?: number;
   bgColor?: string;
-}> = ({ unitId, width = 0, height = 0, bgColor = '#F7F5F5' }) => {
+  onClicked?: () => void;
+  onImpressed?: () => void;
+  onParticipated?: () => void;
+  onRewardRequested?: () => void;
+  onRewarded?: () => void;
+  onRequested?: () => void;
+  onNext?: () => void;
+  onComplete?: () => void;
+  onError?: (errorType: string) => void;
+}> = ({
+  unitId,
+  width = 0,
+  height = 0,
+  bgColor = '#F7F5F5',
+  onClicked,
+  onImpressed,
+  onParticipated,
+  onRewardRequested,
+  onRewarded,
+  onRequested,
+  onNext,
+  onComplete,
+  onError,
+}) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -33,6 +56,19 @@ export const NativeAd: React.FC<{
         width: PixelRatio.getPixelSizeForLayoutSize(width),
         height: PixelRatio.getPixelSizeForLayoutSize(height),
       }}
+      onClicked={onClicked}
+      onImpressed={onImpressed}
+      onParticipated={onParticipated}
+      onRewardRequested={onRewardRequested}
+      onRewarded={onRewarded}
+      onRequested={onRequested}
+      onNext={onNext}
+      onComplete={onComplete}
+      onError={(event) => {
+        if (onError) {
+          onError(`${event.nativeEvent.error}`);
+        }
+      }}
       ref={ref}
     />
   );
@@ -45,6 +81,15 @@ interface NativeViewManagerProps {
     width: number;
     height: number;
   };
+  onClicked?: () => void;
+  onImpressed?: () => void;
+  onParticipated?: () => void;
+  onRewardRequested?: () => void;
+  onRewarded?: () => void;
+  onRequested?: () => void;
+  onNext?: () => void;
+  onComplete?: () => void;
+  onError?: (event: any) => void;
 }
 
 const NativeViewManager = requireNativeComponent<NativeViewManagerProps>(
