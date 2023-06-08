@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Button, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import {
-  Button,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import BuzzvilAdModule, { FeedAds, NativeAd } from 'react-native-buzzvil';
+  BuzzvilAds,
+  BuzzvilFeed,
+  FeedAds,
+  NativeAd,
+} from 'react-native-buzzvil';
 
 const windowWidth = Dimensions.get('window').width;
 let pageCount = 0;
@@ -18,8 +16,8 @@ export default function App() {
   const [showNativeAd, setShowNativeAd] = useState<boolean>(false);
 
   useEffect(() => {
-    BuzzvilAdModule.initialize({ feedId: '293169052486685' });
-    BuzzvilAdModule.setUserInfo({
+    BuzzvilAds.initialize({ feedId: '293169052486685' });
+    BuzzvilAds.setUserInfo({
       userId: '1',
       gender: 'MALE',
       birthYear: 1989,
@@ -91,7 +89,12 @@ export default function App() {
         </View>
 
         <View style={[styles.container, { width: windowWidth }]}>
-          <Text>page2</Text>
+          <Button
+            onPress={() => {
+              BuzzvilFeed.show();
+            }}
+            title={'Feed 보기'}
+          />
         </View>
       </ScrollView>
     </View>

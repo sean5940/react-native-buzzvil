@@ -21,15 +21,13 @@ react-native-google-mobile-ads과 같이 app.json에 앱키를 등록해야 함.
 ```js
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Button, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import {
-  Button,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import BuzzvilAdModule, { FeedAds, NativeAd } from 'react-native-buzzvil';
+  BuzzvilAds,
+  BuzzvilFeed,
+  FeedAds,
+  NativeAd,
+} from 'react-native-buzzvil';
 
 const windowWidth = Dimensions.get('window').width;
 let pageCount = 0;
@@ -39,8 +37,8 @@ export default function App() {
   const [showNativeAd, setShowNativeAd] = useState<boolean>(false);
 
   useEffect(() => {
-    BuzzvilAdModule.initialize();
-    BuzzvilAdModule.setUserInfo({
+    BuzzvilAds.initialize({ feedId: '{your default feed id}' });
+    BuzzvilAds.setUserInfo({
       userId: '1',
       gender: 'MALE',
       birthYear: 1989,
@@ -78,10 +76,19 @@ export default function App() {
           </View>
           <View style={styles.nativeAdContainer}>
             <NativeAd
-              unitId="unitId"
+              unitId="{your unitId id}"
               width={240}
               height={235}
               bgColor="#F1EDED"
+              onParticipated={() => {
+                console.log('onParticipated');
+              }}
+              onRewarded={() => {
+                console.log('onRewarded');
+              }}
+              onError={(errorType) => {
+                console.log('onError:', errorType);
+              }}
             />
           </View>
           {!showNativeAd && (
@@ -98,12 +105,17 @@ export default function App() {
           )}
         </View>
 
-        <View style={{ width: windowWidth }}>
-          <FeedAds unitId="unitId" />
+        <View style={[styles.container, { width: windowWidth }]}>
+          <FeedAds unitId="{your Feed id}" />
         </View>
 
         <View style={[styles.container, { width: windowWidth }]}>
-          <Text>page2</Text>
+          <Button
+            onPress={() => {
+              BuzzvilFeed.show();
+            }}
+            title={'Feed 보기'}
+          />
         </View>
       </ScrollView>
     </View>
@@ -134,6 +146,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
 });
+
 
 
 ```

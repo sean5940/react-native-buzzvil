@@ -40,7 +40,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 
-class BuzzVilNativeViewManager(reactContext: ReactApplicationContext) :
+class BuzzvilNativeViewManager(reactContext: ReactApplicationContext) :
   ViewGroupManager<FrameLayout>() {
 
   companion object {

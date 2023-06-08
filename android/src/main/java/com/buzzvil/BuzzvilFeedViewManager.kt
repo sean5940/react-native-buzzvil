@@ -26,7 +26,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
 
 
-class BuzzVilFeedViewManager(reactContext: ReactApplicationContext) :
+class BuzzvilFeedViewManager(reactContext: ReactApplicationContext) :
   ViewGroupManager<LinearLayout>() {
 
   companion object {
