@@ -166,7 +166,7 @@ class BuzzvilNativeViewManager(reactContext: ReactApplicationContext) :
           hideView(parentView)
           Executors.newSingleThreadScheduledExecutor().schedule({
             binder.bind()
-          }, 10, TimeUnit.SECONDS)
+          }, 30, TimeUnit.MINUTES)
           reactContext
             .getJSModule(RCTEventEmitter::class.java)
             .receiveEvent(root.id, "onError", Arguments.createMap().apply { putString("error", adError?.adErrorType?.name) })
